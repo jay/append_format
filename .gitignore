@@ -1,0 +1,17 @@
+Debug/
+Release/
+enc_temp_folder/
+ipch/
+old/
+private/
+*.exe
+*.idb
+*.ilk
+*.o
+*.obj
+*.old
+*.opensdf
+*.pdb
+*.sdf
+*.suo
+*.user
