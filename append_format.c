@@ -114,7 +114,7 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
 
   crlflen = 0;
 
-  if(oldlen && (flags & APPEND_REMOVE_CR_LF_BEFORE)) {
+  if((flags & APPEND_REMOVE_CR_LF_BEFORE) && oldlen) {
     char *p = &buf[oldlen];
     do {
       --p;
@@ -143,7 +143,7 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
     goto cleanup;
   }
 
-  if((flags & APPEND_REMOVE_CR_LF_AFTER)) {
+  if((flags & APPEND_REMOVE_CR_LF_AFTER) && (bufsize - crlflen - 1)) {
     char *p = &buf[bufsize - crlflen - 1];
     do {
       --p;
