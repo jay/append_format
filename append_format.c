@@ -102,8 +102,21 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
 
   oldlen = *str ? strlen(*str) : 0;
 
-  bufsize = oldlen + seplen + (size_t)count + 1;
-  if(bufsize <= oldlen || bufsize > (unsigned)INT_MAX)
+  bufsize = 1;
+
+  bufsize += oldlen;
+  if(bufsize < oldlen)
+    goto cleanup;
+
+  bufsize += seplen;
+  if(bufsize < seplen)
+    goto cleanup;
+
+  bufsize += (size_t)count;
+  if(bufsize < (size_t)count)
+    goto cleanup;
+
+  if(bufsize > (unsigned)INT_MAX)
     goto cleanup;
 
   buf = (char *)realloc(*str, bufsize);
@@ -134,10 +147,10 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
 #else
   count = vsnprintf(
 #endif
-    &buf[oldlen - crlflen + seplen], (size_t)count + 1, format, args);
+    &buf[oldlen - crlflen + seplen], (size_t)(count + 1), format, args);
   va_end(args);
 
-  if(count < 0 || (unsigned)count != bufsize - oldlen - seplen - 1) {
+  if(count != (int)(bufsize - oldlen - seplen - 1)) {
     memmove(&buf[oldlen - crlflen], &buf[bufsize - crlflen], crlflen);
     buf[oldlen] = '\0';
     goto cleanup;
