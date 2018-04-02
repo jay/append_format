@@ -73,8 +73,7 @@ Documentation
 -------------
 
 Full documentation is in the comment block above `append_flags_sep_format` in
-[append_format.c]
-  (https://github.com/jay/append_format/blob/master/append_format.c).
+[append_format.c](https://github.com/jay/append_format/blob/master/append_format.c).
 
 
 Other
