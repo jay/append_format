@@ -41,18 +41,25 @@ empty "". flags can alter this behavior.
 
 Flags
 -----
-APPEND_REMOVE_CR_LF_BEFORE:     Remove all trailing CR and LF from *str BEFORE
-                                appending to it.
-APPEND_REMOVE_CR_LF_AFTER:      Remove all trailing CR and LF from *str AFTER
-                                appending to it.
-APPEND_REMOVE_CR_LF_BEFORE_AND_AFTER:   Both of the above. The append_rmCRLFs_
-                                        function-like macros use this flag.
+AF_REMOVE_CR_LF_BEFORE_APPEND:     Remove all trailing CR and LF from *str
+                                   BEFORE appending to it.
 
-APPEND_SEP_IF_STR_EMPTY:        Append the separator even if *str before append
-                                is NULL or empty "".
-APPEND_SEP_IF_FORMAT_EMPTY:     Append the separator even if the format outcome
-                                to append is empty "".
-APPEND_SEP_IF_STR_OR_FORMAT_EMPTY:      Both of the above.
+AF_REMOVE_CR_LF_AFTER_APPEND:      Remove all trailing CR and LF from *str
+                                   AFTER appending to it.
+
+AF_REMOVE_CR_LF_BEFORE_AND_AFTER_APPEND:    Both of the above. append_rmCRLFs
+                                            function-like macros use this flag.
+
+AF_APPEND_SEP_IF_STR_EMPTY:        Append the separator even if *str before
+                                   append is NULL or empty "".
+
+AF_APPEND_SEP_IF_FORMAT_EMPTY:     Append the separator even if the format
+                                   outcome to append is empty "".
+
+AF_APPEND_SEP_ALWAYS:              Both of the above.
+
+AF_ALL_FLAGS:                      All flags. This value will change as flags
+                                   are added.
 
 success: the new length of *str (or if !str then the length *str would've been)
 failure: -1: vsnprintf/memory error; the content of *str is unchanged but if
@@ -71,7 +78,7 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
   char *placeholder = NULL;
 
   /* Unrecognized flags should be checked before anything else and return -2 */
-  if((flags & ~APPEND_FLAGS_ALL)) {
+  if((flags & ~AF_ALL_FLAGS)) {
     retcode = -2;
     goto cleanup;
   }
@@ -91,8 +98,8 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
     goto cleanup;
 
   if(sep &&
-     ((*str && **str) || (flags & APPEND_SEP_IF_STR_EMPTY)) &&
-     (count || (flags & APPEND_SEP_IF_FORMAT_EMPTY))) {
+     ((*str && **str) || (flags & AF_APPEND_SEP_IF_STR_EMPTY)) &&
+     (count || (flags & AF_APPEND_SEP_IF_FORMAT_EMPTY))) {
     seplen = strlen(sep);
   }
   else {
@@ -127,7 +134,7 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
 
   crlflen = 0;
 
-  if((flags & APPEND_REMOVE_CR_LF_BEFORE) && oldlen) {
+  if((flags & AF_REMOVE_CR_LF_BEFORE_APPEND) && oldlen) {
     char *p = &buf[oldlen];
     do {
       --p;
@@ -156,7 +163,7 @@ int append_flags_sep_format(char **str, int flags, const char *sep,
     goto cleanup;
   }
 
-  if((flags & APPEND_REMOVE_CR_LF_AFTER) && (bufsize - crlflen - 1)) {
+  if((flags & AF_REMOVE_CR_LF_AFTER_APPEND) && (bufsize - crlflen - 1)) {
     char *p = &buf[bufsize - crlflen - 1];
     do {
       --p;

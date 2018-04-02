@@ -229,7 +229,7 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
   bool ok = true;
 
   /* invalid flag test */
-  assert(!(APPEND_FLAGS_ALL & 0x80000000));
+  assert(!(AF_ALL_FLAGS & 0x80000000));
   assert(-2 == append_flags_sep_format(NULL, 0x80000000, NULL, ""));
 
   int str_state = 0;
@@ -255,7 +255,7 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
     ASSERT_BREAK(0 <= str_state && str_state < STATE_STR_LAST, "");
     ASSERT_BREAK(0 <= sep_state && sep_state < STATE_SEP_LAST, "");
     ASSERT_BREAK(0 <= format_state && format_state < STATE_FORMAT_LAST, "");
-    ASSERT_BREAK(0 <= flags && flags <= APPEND_FLAGS_ALL, "");
+    ASSERT_BREAK(0 <= flags && flags <= AF_ALL_FLAGS, "");
   }
 
   for(bool firstrun = true; ; firstrun = false) {
@@ -278,7 +278,7 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
       if(specific_test_to_run)
         break;
 
-      if(flags++ == APPEND_FLAGS_ALL) {
+      if(flags++ == AF_ALL_FLAGS) {
         flags = 0;
 
         if(++format_state == STATE_FORMAT_LAST) {
@@ -296,7 +296,7 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
     }
 
     /* skip this iteration if it contains a flag that doesn't exist */
-    if(flags != (flags & APPEND_FLAGS_ALL))
+    if(flags != (flags & AF_ALL_FLAGS))
       continue;
 
     switch(format_state) {
@@ -426,7 +426,7 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
     if(str && *str && **str)
       strcat(expected, *str);
 
-    if((flags & APPEND_REMOVE_CR_LF_BEFORE))
+    if((flags & AF_REMOVE_CR_LF_BEFORE_APPEND))
       trim_all_trailing_cr_or_lf(expected);
 
     char formatted_outcome_to_append[1024];
@@ -440,15 +440,15 @@ bool runtests(struct test_content *content, const char *specific_test_to_run)
     /* the separator isn't used if either *str is NULL or empty OR the
        formatted outcome to append is empty. */
     if(sep && *sep &&
-       (*expected || (flags & APPEND_SEP_IF_STR_EMPTY)) &&
+       (*expected || (flags & AF_APPEND_SEP_IF_STR_EMPTY)) &&
        (*formatted_outcome_to_append ||
-        (flags & APPEND_SEP_IF_FORMAT_EMPTY))) {
+        (flags & AF_APPEND_SEP_IF_FORMAT_EMPTY))) {
       strcat(expected, sep);
     }
 
     strcat(expected, formatted_outcome_to_append);
 
-    if((flags & APPEND_REMOVE_CR_LF_AFTER))
+    if((flags & AF_REMOVE_CR_LF_AFTER_APPEND))
       trim_all_trailing_cr_or_lf(expected);
 
     size_t expectedlen = strlen(expected);

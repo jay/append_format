@@ -44,29 +44,28 @@ append_format.{c,h} can be included in any C or C++ project.
 Flags
 -----
 
-#### APPEND_REMOVE_CR_LF_BEFORE
+#### AF_REMOVE_CR_LF_BEFORE_APPEND
 Remove all trailing CR and LF from *str BEFORE appending to it.
 
-#### APPEND_REMOVE_CR_LF_AFTER
+#### AF_REMOVE_CR_LF_AFTER_APPEND
 Remove all trailing CR and LF from *str AFTER appending to it.
 
-#### APPEND_REMOVE_CR_LF_BEFORE_AND_AFTER
+#### AF_REMOVE_CR_LF_BEFORE_AND_AFTER_APPEND
 Both of the above: Remove all trailing CR and LF from *str BEFORE and AFTER
 appending to it.
 
-#### APPEND_SEP_IF_STR_EMPTY
+#### AF_APPEND_SEP_IF_STR_EMPTY
 Append the separator even if *str before append is NULL or empty "".
 
-#### APPEND_SEP_IF_FORMAT_EMPTY
+#### AF_APPEND_SEP_IF_FORMAT_EMPTY
 Append the separator even if the format outcome to append is empty "".
 
-#### APPEND_SEP_IF_STR_OR_FORMAT_EMPTY
+#### AF_APPEND_SEP_ALWAYS
 Both of the above: Append the separator even if *str is NULL or empty "" OR the
 format outcome to append is empty "".
 
-#### APPEND_FLAGS_ALL
-All of the flags. This value will of course change as flags are added or
-removed.
+#### AF_ALL_FLAGS
+All flags. This value will change as flags are added.
 
 
 Documentation
